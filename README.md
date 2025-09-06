@@ -9,3 +9,7 @@ Features:
 Install dependencies:
 This project requires the `cryptography` library. Install it with:
 pip install cryptography
+
+![My Screenshot](memoir_front.png)
+![My Screenshot](memoir_menu.png)
+
