@@ -6,9 +6,8 @@ from datetime import datetime
 import customtkinter as ctk
 from tkinter import messagebox
 
-# =========================
 #  CONFIGURATION
-# =========================
+
 BASE_DIR = os.path.expanduser("~")
 DATA_FOLDER = os.path.join(BASE_DIR, "MemoirData")
 KEY_FILE = os.path.join(DATA_FOLDER, "secret.key")
@@ -17,6 +16,7 @@ PIN_FILE = os.path.join(DATA_FOLDER, "pin.json")
 os.makedirs(DATA_FOLDER, exist_ok=True)
 
 # Colors & Fonts
+
 BG_COLOR = "#F9F9E0"   
 ACCENT_COLOR = "#2C3639"  
 BUTTON_COLOR = "#F7CAC9"
@@ -25,9 +25,8 @@ FONT_SUBTITLE = ("Palatino Linotype", 35)
 FONT_BUTTON = ("SansSerif", 18)
 FONT_TEXT = ("SansSerif", 16)
 
-# =========================
 #  ENCRYPTION
-# =========================
+
 def load_key():
     if not os.path.exists(KEY_FILE):
         key = Fernet.generate_key()
@@ -40,9 +39,8 @@ def load_key():
 
 fernet = load_key()
 
-# =========================
 #  PIN HANDLING
-# =========================
+
 def hash_pin(pin: str) -> str:
     return hashlib.sha256(pin.encode()).hexdigest()
 
@@ -58,9 +56,8 @@ def save_pin(pin):
     with open(PIN_FILE, "w") as f:
         json.dump({"pin_hash": hash_pin(pin)}, f)
 
-# =========================
 #  MEMORY FUNCTIONS
-# =========================
+
 def load_memories():
     if not os.path.exists(DATA_FILE):
         return []
@@ -71,19 +68,15 @@ def save_memories(memories):
     with open(DATA_FILE, "w") as f:
         json.dump(memories, f, indent=4)
 
-# =========================
 #  MAIN APP CLASS
-# =========================
+
 class MemoirApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("MEMOIR - Your Digital Diary")
-        self.state("zoomed")  # Fullscreen
+        self.state("zoomed")  
         ctk.set_appearance_mode("light")  
-
-        # Set background color
         self.configure(fg_color=BG_COLOR)
-
         self.container = ctk.CTkFrame(self, fg_color=BG_COLOR)
         self.container.pack(fill="both", expand=True)
 
@@ -99,9 +92,8 @@ class MemoirApp(ctk.CTk):
         frame = self.frames[page]
         frame.tkraise()
 
-# =========================
 #  PIN SCREEN
-# =========================
+
 class PinScreen(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, fg_color=BG_COLOR)
@@ -145,9 +137,8 @@ class PinScreen(ctk.CTkFrame):
             else:
                 messagebox.showerror("Error", "Incorrect PIN")
 
-# =========================
 #  MAIN MENU
-# =========================
+
 class MainMenu(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, fg_color=BG_COLOR)
@@ -168,9 +159,8 @@ class MainMenu(ctk.CTkFrame):
                       width=300, height=60, font=FONT_BUTTON,
                       fg_color="#FE5050", text_color="white").pack(pady=20)
 
-# =========================
 #  ADD MEMORY
-# =========================
+
 class AddMemory(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, fg_color=BG_COLOR)
@@ -206,9 +196,8 @@ class AddMemory(ctk.CTkFrame):
         except ValueError:
             messagebox.showerror("Error", "Date must be in YYYY-MM-DD format")
 
-# =========================
 #  VIEW MEMORY
-# =========================
+
 class ViewMemory(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, fg_color=BG_COLOR)
@@ -241,9 +230,8 @@ class ViewMemory(ctk.CTkFrame):
         else:
             messagebox.showwarning("Locked", f"This memory is locked until {unlock_date}")
 
-# =========================
 #  DELETE MEMORY
-# =========================
+
 class DeleteMemory(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, fg_color=BG_COLOR)
@@ -273,9 +261,8 @@ class DeleteMemory(ctk.CTkFrame):
             messagebox.showinfo("Deleted", "Memory deleted successfully")
             self.controller.show_frame(MainMenu)
 
-# =========================
 #  RUN APP
-# =========================
+
 if __name__ == "__main__":
     app = MemoirApp()
     app.mainloop()
